@@ -4,6 +4,12 @@ import (
 	"wit/apps/wit/pkg/tracker"
 )
 
+// Source ...
+type Source string
+
+// Destination ...
+type Destination string
+
 // Persistor provides a way to save the state of a repository to disk.
 type Persistor interface {
 	// Persists the given stash to disk.
