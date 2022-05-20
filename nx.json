@@ -12,18 +12,14 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
-    ".eslintrc.json": "*"
+    ".eslintrc.json": "*",
+    "go.mod": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "MmE2NGQ5YmYtNDk0ZC00MDVmLWI0ZWYtNzg4OGZhMTVkMzE5fHJlYWQtd3JpdGU="
       }
     }
