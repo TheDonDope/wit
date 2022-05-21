@@ -5,16 +5,16 @@ import (
 	"wit/apps/wit/pkg/tracker"
 )
 
-// Persistor provides a way to save the state of a repository to disk.
+// Persistor provides functionality to write to I/O and persist stashes.
 type Persistor interface {
-	// Persists the given stash to disk.
+	// Commit persists the given stashes to given io.Writer.
 	Commit(w io.Writer, s ...*tracker.Stash)
 }
 
-// Selector retrieves the stash with the given name from disk.
+// Selector provides functionality read from I/O and return a Stash
 type Selector interface {
-	// Retrieve the stash with the given name from disk.
-	Pull(r io.Reader) *tracker.Stash
+	// Checkout retrieves the stash from the given io.Reader
+	Checkout(r io.Reader) *tracker.Stash
 }
 
 // Repository holds the information about all the stashes.

@@ -8,27 +8,16 @@ import (
 	"wit/apps/wit/pkg/tracker"
 )
 
-type jsonSelector struct {
-	r io.Reader
-}
+// JSONSelector ...
+type JSONSelector struct{}
 
-type jsonPersistor struct {
-	w io.Writer
-}
+// JSONPersistor ...
+type JSONPersistor struct{}
 
-// NewJSONSelector ...
-func NewJSONSelector(r io.Reader) Selector {
-	return &jsonSelector{r}
-}
-
-// NewJSONPersistor ...
-func NewJSONPersistor(w io.Writer) Persistor {
-	return &jsonPersistor{w}
-}
-
-// Pull ...
-func (j *jsonSelector) Pull(r io.Reader) *tracker.Stash {
-	fmt.Println(fmt.Printf("jsonSelector.Pull(r: %v)", r))
+// Checkout reads from the given io.Reader assuming JSON bytes
+// and returning an unmarshaled Stash instance.
+func (j *JSONSelector) Checkout(r io.Reader) *tracker.Stash {
+	fmt.Println(fmt.Printf("JSONSelector.Pull(r: %v)", r))
 
 	var stash *tracker.Stash
 
@@ -45,19 +34,17 @@ func (j *jsonSelector) Pull(r io.Reader) *tracker.Stash {
 	return stash
 }
 
-// Commit ...
-func (j *jsonPersistor) Commit(w io.Writer, s ...*tracker.Stash) {
-	fmt.Println(fmt.Printf("jsonPersistor.Commit(w: %v, s: %v)", w, s))
+// Commit writes to the given io.Writer
+func (j *JSONPersistor) Commit(w io.Writer, s ...*tracker.Stash) {
+	fmt.Println(fmt.Printf("JSONPersistor.Commit(w: %v, s: %v)", w, s))
 	for _, v := range s {
-		path := v.Strain + ".json"
 		b, err := json.Marshal(v)
 		fmt.Println(fmt.Printf("  json.Marshal(): %v", b))
 		if err != nil {
 			panic(err)
 		}
 
-		//
-		if err := ioutil.WriteFile(path, b, 0644); err != nil {
+		if _, err := w.Write(b); err != nil {
 			panic(err)
 		}
 	}
