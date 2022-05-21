@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "wit",
   "affected": {
-    "defaultBase": "develop"
+    "defaultBase": "main"
   },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
