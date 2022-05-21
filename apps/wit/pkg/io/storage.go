@@ -17,19 +17,35 @@ type Selector interface {
 	Checkout(r io.Reader) *tracker.Stash
 }
 
+// Puller provides functionality to update the in-memory
+// state of the repository with the persistant state
+// from I/O.
+type Puller interface {
+	// Pull gets the latest persistant state from I/O
+	// and updates the in-memory state accordingly.
+	Pull(r *Repository)
+}
+
+// Pusher provides functionality to persist the current
+// in-memory state of the repository to I/O.
+type Pusher interface {
+	// Push persists the current repository state to I/O
+	Push(r *Repository)
+}
+
 // Repository holds the information about all the stashes.
 type Repository struct {
 	// All stashes as mapping of their name to their instance
-	r       io.Reader
-	w       io.Writer
-	Stashes map[string]*tracker.Stash
+	Persistor Persistor
+	Selector  Selector
+	Stashes   map[string]*tracker.Stash
 }
 
 // NewRepository ...
-func NewRepository(r io.Reader, w io.Writer) *Repository {
+func NewRepository(p Persistor, s Selector) *Repository {
 	return &Repository{
-		r:       r,
-		w:       w,
-		Stashes: make(map[string]*tracker.Stash),
+		Persistor: p,
+		Selector:  s,
+		Stashes:   make(map[string]*tracker.Stash),
 	}
 }
