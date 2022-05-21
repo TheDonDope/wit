@@ -38,7 +38,21 @@ type Repository struct {
 	// All stashes as mapping of their name to their instance
 	Persistor Persistor
 	Selector  Selector
+	HomePath  string
+	Overwrite bool
 	Stashes   map[string]*tracker.Stash
+}
+
+// RepoOption ...
+type RepoOption func(r *Repository) RepoOption
+
+// Option sets the options specified.
+// It returns an option to restore the last arg's previous value.
+func (r *Repository) Option(opts ...RepoOption) (previous RepoOption) {
+	for _, opt := range opts {
+		previous = opt(r)
+	}
+	return previous
 }
 
 // NewRepository ...
@@ -46,6 +60,16 @@ func NewRepository(p Persistor, s Selector) *Repository {
 	return &Repository{
 		Persistor: p,
 		Selector:  s,
+		HomePath:  "~",
 		Stashes:   make(map[string]*tracker.Stash),
+	}
+}
+
+// HomePath ...
+func HomePath(p string) RepoOption {
+	return func(r *Repository) RepoOption {
+		previous := r.HomePath
+		r.HomePath = p
+		return HomePath(previous)
 	}
 }

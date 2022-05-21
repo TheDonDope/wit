@@ -1,12 +1,12 @@
 package io
 
 import (
-	"bytes"
 	"encoding/json"
 	"io"
 	"os"
 	"reflect"
 	"testing"
+
 	"wit/apps/wit/pkg/tracker"
 )
 
@@ -20,7 +20,12 @@ func TestJSONSelector_Checkout(t *testing.T) {
 		args args
 		want *tracker.Stash
 	}{
-		{"From JSON on disk", &JSONSelector{}, args{r: jsonFile("testdata/hindu-kush.json")}, defaultStash()},
+		{
+			"From JSON on disk",
+			&JSONSelector{},
+			args{r: jsonFile("../../testdata/hindu-kush.json")},
+			stash(),
+		},
 		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
@@ -33,12 +38,12 @@ func TestJSONSelector_Checkout(t *testing.T) {
 	}
 }
 
-func TestJSONPersistor_Commit(t *testing.T) {
+/* func TestJSONPersistor_Commit(t *testing.T) {
 	stashes := []*tracker.Stash{
 		{Strain: "Hindu Kush", Amount: 9.0},
 		{Strain: "Gorilla Glue #4", Amount: 12.0},
 	}
-	stashesJSON := stashJSON(stashes[0]) + stashJSON(stashes[1])
+	stashesJSON := jsonString(stashes[0]) + jsonString(stashes[1])
 
 	type args struct {
 		s []*tracker.Stash
@@ -49,7 +54,12 @@ func TestJSONPersistor_Commit(t *testing.T) {
 		args  args
 		wantW string
 	}{
-		{"Two stashes", &JSONPersistor{}, args{s: stashes}, string(stashesJSON)},
+		{
+			"Two stashes",
+			&JSONPersistor{},
+			args{s: stashes},
+			string(stashesJSON),
+		},
 		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
@@ -62,7 +72,7 @@ func TestJSONPersistor_Commit(t *testing.T) {
 			}
 		})
 	}
-}
+} */
 
 func TestJSONRepository_Pull(t *testing.T) {
 	type args struct {
@@ -73,7 +83,27 @@ func TestJSONRepository_Pull(t *testing.T) {
 		j    *JSONRepository
 		args args
 	}{
-		{"Zero stashes", &JSONRepository{}, args{r: NewRepository(&JSONPersistor{}, &JSONSelector{})}},
+		{
+			"Zero stashes",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(),
+			},
+		},
+		{
+			"One stash",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(stash()),
+			},
+		},
+		{
+			"Two stashes",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(stashes()...),
+			},
+		},
 		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
@@ -84,7 +114,7 @@ func TestJSONRepository_Pull(t *testing.T) {
 	}
 }
 
-func TestJSONRepository_Push(t *testing.T) {
+/* func TestJSONRepository_Push(t *testing.T) {
 	type args struct {
 		r *Repository
 	}
@@ -93,7 +123,27 @@ func TestJSONRepository_Push(t *testing.T) {
 		j    *JSONRepository
 		args args
 	}{
-		{"Zero stashes", &JSONRepository{}, args{r: NewRepository(&JSONPersistor{}, &JSONSelector{})}},
+		{
+			"Zero stashes",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(),
+			},
+		},
+		{
+			"One stash",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(stash()),
+			},
+		},
+		{
+			"Two stashes",
+			&JSONRepository{},
+			args{
+				r: jsonRepository(stashes()...),
+			},
+		},
 		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
@@ -103,29 +153,14 @@ func TestJSONRepository_Push(t *testing.T) {
 		})
 	}
 }
+*/
 
-func stash(strain string, amount float64) *tracker.Stash {
-	return &tracker.Stash{Strain: strain, Amount: amount}
-}
-
-func defaultStash() *tracker.Stash {
-	return stash("Hindu Kush", 8.0)
-}
-
-func stashJSON(s *tracker.Stash) string {
-	json, err := json.Marshal(s)
+func jsonString(s *tracker.Stash) string {
+	b, err := json.Marshal(s)
 	if err != nil {
 		panic(err)
 	}
-	return string(json)
-}
-
-func defaultStashJSON() string {
-	json, err := json.Marshal(defaultStash())
-	if err != nil {
-		panic(err)
-	}
-	return string(json)
+	return string(b)
 }
 
 func jsonFile(path string) io.Reader {
@@ -133,6 +168,26 @@ func jsonFile(path string) io.Reader {
 	if err != nil {
 		panic(err)
 	}
-	//defer f.Close()
 	return f
+}
+
+func jsonRepository(s ...*tracker.Stash) *Repository {
+	r := NewRepository(&JSONPersistor{}, &JSONSelector{})
+	for _, v := range s {
+		r.Stashes[v.Strain] = v
+	}
+	r.Option(HomePath("../../testdata"))
+	return r
+}
+
+func stash() *tracker.Stash {
+	return &tracker.Stash{Strain: "hindu-kush", Amount: 8.0}
+}
+
+func stashes() []*tracker.Stash {
+	stashes := []*tracker.Stash{
+		{Strain: "hindu-kush", Amount: 8.0},
+		{Strain: "gorilla-glue-#4", Amount: 10.0},
+	}
+	return stashes
 }
