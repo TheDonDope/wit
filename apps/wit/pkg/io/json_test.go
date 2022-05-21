@@ -21,6 +21,7 @@ func TestJSONSelector_Checkout(t *testing.T) {
 		want *tracker.Stash
 	}{
 		{"In-Memory JSON String", &JSONSelector{}, args{r: strings.NewReader(defaultStashJSON())}, defaultStash()},
+		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -49,6 +50,7 @@ func TestJSONPersistor_Commit(t *testing.T) {
 		wantW string
 	}{
 		{"Two stashes", &JSONPersistor{}, args{s: stashes}, string(stashesJSON)},
+		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -71,7 +73,8 @@ func TestJSONRepository_Pull(t *testing.T) {
 		j    *JSONRepository
 		args args
 	}{
-		// TODO: Add test cases.
+		{"Zero stashes", &JSONRepository{}, args{r: NewRepository(&JSONPersistor{}, &JSONSelector{})}},
+		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -90,7 +93,8 @@ func TestJSONRepository_Push(t *testing.T) {
 		j    *JSONRepository
 		args args
 	}{
-		// TODO: Add test cases.
+		{"Zero stashes", &JSONRepository{}, args{r: NewRepository(&JSONPersistor{}, &JSONSelector{})}},
+		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
