@@ -64,7 +64,9 @@ These steps are handled through GitHub Workflows / Actions, see: [.github/workfl
 
 ## Semantic Version
 
-Run `nx run wit:version` to create a new semantic git version tag and update the [CHANGELOG.md](./apps/wit/CHANGELOG.md). Note: you do need to manually push the changes via `$ git push`, respectively `$ git push --tags`.
+Run `nx run wit:next-version` to display information about the next semantic version to be set.
+
+Run `nx run wit:push-version` to create a new semantic git version tag and update the [CHANGELOG.md](./apps/wit/CHANGELOG.md) and push them to the remote repository.
 
 ## Understand your workspace
 
