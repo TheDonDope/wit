@@ -60,7 +60,7 @@ Run `nx run wit:docker` to build the docker image and push it to the Dockerhub r
 
 ## Building Docker image on GitHub and pushing to GitHub Container Registry
 
-These steps are handled through GitHub Workflows / Actions, see: [.github/workflows/docker.yml](./github/workflows/docker.yml)
+These steps are handled through GitHub Workflows / Actions, see: [.github/workflows/docker.yml](./.github/workflows/docker.yml)
 
 ## Semantic Version
 
