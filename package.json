@@ -17,10 +17,10 @@
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "14.1.7",
     "@nx-go/nx-go": "^2.5.0",
+    "@nx-tools/nx-docker": "^2.3.0",
     "husky": "^7.0.4",
     "nx": "14.1.7",
     "prettier": "^2.5.1",
     "typescript": "~4.6.2"
-  },
-  "dependencies": {}
+  }
 }
