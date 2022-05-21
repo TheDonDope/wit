@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"os"
 	"reflect"
-	"strings"
 	"testing"
 	"wit/apps/wit/pkg/tracker"
 )
@@ -20,7 +20,7 @@ func TestJSONSelector_Checkout(t *testing.T) {
 		args args
 		want *tracker.Stash
 	}{
-		{"In-Memory JSON String", &JSONSelector{}, args{r: strings.NewReader(defaultStashJSON())}, defaultStash()},
+		{"From JSON on disk", &JSONSelector{}, args{r: jsonFile("testdata/hindu-kush.json")}, defaultStash()},
 		// TODO: Add more test cases.
 	}
 	for _, tt := range tests {
@@ -35,8 +35,8 @@ func TestJSONSelector_Checkout(t *testing.T) {
 
 func TestJSONPersistor_Commit(t *testing.T) {
 	stashes := []*tracker.Stash{
-		{Strain: "hindu-kush", Amount: 9.0},
-		{Strain: "gorilla-glue-#4", Amount: 12.0},
+		{Strain: "Hindu Kush", Amount: 9.0},
+		{Strain: "Gorilla Glue #4", Amount: 12.0},
 	}
 	stashesJSON := stashJSON(stashes[0]) + stashJSON(stashes[1])
 
@@ -109,7 +109,7 @@ func stash(strain string, amount float64) *tracker.Stash {
 }
 
 func defaultStash() *tracker.Stash {
-	return stash("hindu-kush", 8.0)
+	return stash("Hindu Kush", 8.0)
 }
 
 func stashJSON(s *tracker.Stash) string {
@@ -126,4 +126,13 @@ func defaultStashJSON() string {
 		panic(err)
 	}
 	return string(json)
+}
+
+func jsonFile(path string) io.Reader {
+	f, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	//defer f.Close()
+	return f
 }
