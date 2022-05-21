@@ -21,6 +21,12 @@
     },
     "lint": {
       "executor": "@nx-go/nx-go:lint"
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
+      }
     }
   },
   "tags": []
