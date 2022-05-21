@@ -7,13 +7,13 @@
       "executor": "@nx-go/nx-go:build",
       "options": {
         "outputPath": "dist/apps/wit",
-        "main": "apps/wit/cmd/cli/main.go"
+        "main": "apps/wit/main.go"
       }
     },
     "serve": {
       "executor": "@nx-go/nx-go:serve",
       "options": {
-        "main": "apps/wit/cmd/cli/main.go"
+        "main": "apps/wit/main.go"
       }
     },
     "test": {
