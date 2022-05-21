@@ -2,6 +2,21 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.0](https://github.com/TheDonDope/wit/compare/wit-0.1.0...wit-0.2.0) (2022-05-21)
+
+
+### Features
+
+* add docker build ([30a9a9a](https://github.com/TheDonDope/wit/commit/30a9a9a08e2121b6fa0c63c21e3f45bc3beb93c6))
+* **docker:** integrate local and remote docker build and push ([6d4386a](https://github.com/TheDonDope/wit/commit/6d4386ab5d4431111b37423568e4c6e9e46b9d9e))
+* **nx:** add version targets to nx project ([83c1629](https://github.com/TheDonDope/wit/commit/83c16296a6bc74ba5c48b651117cc2a72e7e849c))
+* **wit:** provide version information ([286b52e](https://github.com/TheDonDope/wit/commit/286b52e95e9aa45e3d884339557e687716081371))
+
+
+### Bug Fixes
+
+* **init:** adjust formatted printout ([469bb7a](https://github.com/TheDonDope/wit/commit/469bb7abbbc7c320589d914f78f8458189c199e0))
+
 ## 0.1.0 (2022-05-21)
 
 
