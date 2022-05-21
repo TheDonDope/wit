@@ -3,64 +3,62 @@ package io
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
-	"os"
 	"wit/apps/wit/pkg/tracker"
 )
 
-// Commit ...
-func (d Destination) Commit(stash *tracker.Stash) {
-	fmt.Println(fmt.Printf("Destination.Commit(d: %v, stash: %v)", d, stash))
+type jsonSelector struct {
+	r io.Reader
+}
 
-	b, err := json.Marshal(stash)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(fmt.Printf("  b: %v", b))
+type jsonPersistor struct {
+	w io.Writer
+}
 
-	if _, err := os.Stat(string(d)); err == nil {
-		os.Remove(string(d))
-	}
+// NewJSONSelector ...
+func NewJSONSelector(r io.Reader) Selector {
+	return &jsonSelector{r}
+}
 
-	f, err := os.OpenFile(string(d), os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-	fmt.Println(fmt.Printf("  f: %v", f))
-
-	f.Write(b)
+// NewJSONPersistor ...
+func NewJSONPersistor(w io.Writer) Persistor {
+	return &jsonPersistor{w}
 }
 
 // Pull ...
-func (s Source) Pull(name string) *tracker.Stash {
-	fmt.Println(fmt.Printf("Source.Pull(s: %v, name: %v)", s, name))
+func (j *jsonSelector) Pull(r io.Reader) *tracker.Stash {
+	fmt.Println(fmt.Printf("jsonSelector.Pull(r: %v)", r))
 
-	f, err := os.Open(string(s))
+	var stash *tracker.Stash
+
+	b, err := ioutil.ReadAll(r)
+	fmt.Println(fmt.Printf("  ioutil.ReadAll(): %v", b))
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
-	fmt.Println(fmt.Printf("  f: %v", f))
 
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
+	if err := json.Unmarshal(b, &stash); err != nil {
 		panic(err)
 	}
-	fmt.Println(fmt.Printf("  b: %v", b))
 
-	var stashes []*tracker.Stash
-	json.Unmarshal(b, &stashes)
-	fmt.Println(fmt.Printf("  stashes:  %v", stashes))
+	return stash
+}
 
-	for _, s := range stashes {
-		fmt.Println(fmt.Printf("  s: %v", s))
-		if s.Strain == name {
-			fmt.Println("found")
-			return s
+// Commit ...
+func (j *jsonPersistor) Commit(w io.Writer, s ...*tracker.Stash) {
+	fmt.Println(fmt.Printf("jsonPersistor.Commit(w: %v, s: %v)", w, s))
+	for _, v := range s {
+		path := v.Strain + ".json"
+		b, err := json.Marshal(v)
+		fmt.Println(fmt.Printf("  json.Marshal(): %v", b))
+		if err != nil {
+			panic(err)
+		}
+
+		//
+		if err := ioutil.WriteFile(path, b, 0644); err != nil {
+			panic(err)
 		}
 	}
-
-	fmt.Println("not found")
-	return &tracker.Stash{}
 }
