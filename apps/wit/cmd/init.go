@@ -12,7 +12,7 @@ var initCmd = &cobra.Command{
 	Short: "Initializes a new wit repository at the given path",
 	Long: `Creates the necessary folder and file structure to store your repository on disk.
 
-  A folder called '.wit' will be created, which host all the files.`,
+A folder called '.wit' will be created, which host all the files.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var path string
 		if len(args) == 0 {
