@@ -11,12 +11,6 @@ import (
 )
 
 func TestJSONSelector_Checkout(t *testing.T) {
-	hc := &tracker.Stash{Strain: "hindu-kush", Amount: 8.0}
-	hcJSON, err := json.Marshal(hc)
-	if err != nil {
-		panic(err)
-	}
-
 	type args struct {
 		r io.Reader
 	}
@@ -26,7 +20,7 @@ func TestJSONSelector_Checkout(t *testing.T) {
 		args args
 		want *tracker.Stash
 	}{
-		{"In-Memory JSON String", &JSONSelector{}, args{r: strings.NewReader(string(hcJSON))}, hc},
+		{"In-Memory JSON String", &JSONSelector{}, args{r: strings.NewReader(defaultStashJSON())}, defaultStash()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -39,6 +33,12 @@ func TestJSONSelector_Checkout(t *testing.T) {
 }
 
 func TestJSONPersistor_Commit(t *testing.T) {
+	stashes := []*tracker.Stash{
+		{Strain: "hindu-kush", Amount: 9.0},
+		{Strain: "gorilla-glue-#4", Amount: 12.0},
+	}
+	stashesJSON := stashJSON(stashes[0]) + stashJSON(stashes[1])
+
 	type args struct {
 		s []*tracker.Stash
 	}
@@ -48,7 +48,7 @@ func TestJSONPersistor_Commit(t *testing.T) {
 		args  args
 		wantW string
 	}{
-		// TODO: Add test cases.
+		{"Two stashes", &JSONPersistor{}, args{s: stashes}, string(stashesJSON)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -98,4 +98,28 @@ func TestJSONRepository_Push(t *testing.T) {
 			j.Push(tt.args.r)
 		})
 	}
+}
+
+func stash(strain string, amount float64) *tracker.Stash {
+	return &tracker.Stash{Strain: strain, Amount: amount}
+}
+
+func defaultStash() *tracker.Stash {
+	return stash("hindu-kush", 8.0)
+}
+
+func stashJSON(s *tracker.Stash) string {
+	json, err := json.Marshal(s)
+	if err != nil {
+		panic(err)
+	}
+	return string(json)
+}
+
+func defaultStashJSON() string {
+	json, err := json.Marshal(defaultStash())
+	if err != nil {
+		panic(err)
+	}
+	return string(json)
 }
