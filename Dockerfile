@@ -5,13 +5,13 @@ FROM nxgo/cli as builder
 WORKDIR /workspace
 
 # Copy package.json and the lock file
-COPY ../../package.json ../../package-lock.json /workspace/
+COPY package.json package-lock.json /workspace/
 
 # Install app dependencies
 RUN npm install
 
 # Copy source files
-COPY ../.. .
+COPY . .
 
 # Build apps
 RUN npx nx build wit

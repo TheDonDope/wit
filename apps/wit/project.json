@@ -25,6 +25,7 @@
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
+        "file": "./Dockerfile",
         "push": true,
         "tags": ["thedondope/wit:latest", "thedondope/wit:v1"]
       }
