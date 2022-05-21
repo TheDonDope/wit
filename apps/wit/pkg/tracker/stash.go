@@ -14,6 +14,8 @@ type Grinder interface {
 
 // Stash holds the information about the inventory of a specific strain.
 type Stash struct {
-	Strain string  `json:"strain"`
+	// The name of the plant
+	Strain string `json:"strain"`
+	// The amount in grams
 	Amount float64 `json:"amount"`
 }
