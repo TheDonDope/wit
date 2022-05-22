@@ -3,6 +3,8 @@ package io
 import (
 	"io"
 	"wit/apps/wit/pkg/tracker"
+
+	"github.com/spf13/viper"
 )
 
 // Persistor provides functionality to write to I/O and persist stashes.
@@ -15,6 +17,15 @@ type Persistor interface {
 type Selector interface {
 	// Checkout retrieves the stash from the given io.Reader
 	Checkout(r io.Reader) *tracker.Stash
+}
+
+// Initializer provides functionality to create the folder
+// structure for local storage.
+type Initializer interface {
+	// Init creates the folder structore to store the files
+	// of the given Repository. The repositories configuration
+	// (e.g. $WIT_DIR) will be honored.
+	Init(r *Repository)
 }
 
 // Puller provides functionality to update the in-memory
@@ -39,7 +50,6 @@ type Repository struct {
 	Persistor Persistor
 	Selector  Selector
 	WitDir    string
-	Overwrite bool
 	Stashes   map[string]*tracker.Stash
 }
 
@@ -60,7 +70,7 @@ func NewRepository(p Persistor, s Selector) *Repository {
 	return &Repository{
 		Persistor: p,
 		Selector:  s,
-		WitDir:    ".wit",
+		WitDir:    viper.GetString("WitDir"),
 		Stashes:   make(map[string]*tracker.Stash),
 	}
 }
