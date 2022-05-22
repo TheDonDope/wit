@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 	Short: "The Weed Information Tracker as a Golang TUI",
 	Long: `Wit aims to help cannabis patients and users to manage and monitor their cannabis consumption and inventory.
 It provides a TUI with a syntax which may seem familiar to users of git. :)`,
-	Version: "v0.2.0",
+	Version: "v0.1.0",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
