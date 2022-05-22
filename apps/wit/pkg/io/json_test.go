@@ -176,7 +176,7 @@ func jsonRepository(s ...*tracker.Stash) *Repository {
 	for _, v := range s {
 		r.Stashes[v.Strain] = v
 	}
-	r.Option(HomePath("../../testdata"))
+	r.Option(WitDir("../../testdata"))
 	return r
 }
 

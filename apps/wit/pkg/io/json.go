@@ -61,7 +61,7 @@ func (j *JSONRepository) Pull(r *Repository) {
 	fmt.Println(fmt.Printf("JSONRepository.Pull(r: %v)", r))
 
 	for _, v := range r.Stashes {
-		path := r.HomePath + "/" + v.Strain + ".json"
+		path := r.WitDir + "/" + v.Strain + ".json"
 		f, err := os.Open(path)
 		if err != nil {
 			panic(err)
@@ -78,7 +78,7 @@ func (j *JSONRepository) Pull(r *Repository) {
 func (j *JSONRepository) Push(r *Repository) {
 	fmt.Println(fmt.Printf("JSONRepository.Push(r: %v)", r))
 	for _, v := range r.Stashes {
-		path := r.HomePath + "/" + v.Strain + ".json"
+		path := r.WitDir + "/" + v.Strain + ".json"
 		if _, err := os.Stat(path); err == nil {
 			os.Remove(path)
 		}

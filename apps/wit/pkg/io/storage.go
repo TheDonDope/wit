@@ -38,7 +38,7 @@ type Repository struct {
 	// All stashes as mapping of their name to their instance
 	Persistor Persistor
 	Selector  Selector
-	HomePath  string
+	WitDir    string
 	Overwrite bool
 	Stashes   map[string]*tracker.Stash
 }
@@ -60,16 +60,16 @@ func NewRepository(p Persistor, s Selector) *Repository {
 	return &Repository{
 		Persistor: p,
 		Selector:  s,
-		HomePath:  "~",
+		WitDir:    ".wit",
 		Stashes:   make(map[string]*tracker.Stash),
 	}
 }
 
-// HomePath ...
-func HomePath(p string) RepoOption {
+// WitDir ...
+func WitDir(p string) RepoOption {
 	return func(r *Repository) RepoOption {
-		previous := r.HomePath
-		r.HomePath = p
-		return HomePath(previous)
+		previous := r.WitDir
+		r.WitDir = p
+		return WitDir(previous)
 	}
 }
